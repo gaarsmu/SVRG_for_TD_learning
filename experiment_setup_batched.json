@@ -1,0 +1,26 @@
+{"num_experiments" :  10,
+  "num_parallel_processes" : 2,
+  "experiment_type" : "dataset",
+  "out_path" : "Results/Experiment_test2.pth",
+  "experiment_arguments" : {
+    "type": "MDP",
+    "dim" : 400,
+    "f_dim" : 21,
+    "gamma" : 0.95,
+    "dtype" : "float64",
+    "PHI" : "random",
+    "probs_type" : "sparse",
+    "report_freq" : 50000,
+    "length" : 50000,
+    "num_outer": 10,
+    "shift_length":  10},
+  "solvers" : [
+    {"type" : "SVRG",
+     "title" : "SVRG"
+    },
+    {"type" : "batched_SVRG",
+     "title" : "bSVRG",
+     "conv_rate" : 0.6667
+    }
+  ]
+}
