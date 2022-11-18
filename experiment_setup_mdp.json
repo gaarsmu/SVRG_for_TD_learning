@@ -25,8 +25,7 @@
     },
     {"type" : "TD",
      "title" : "TD-1/t",
-     "learning_rate" : "decr",
-     "decay_rate" : 0.5
+     "learning_rate" : "decr"
     },
     {"type" : "GTD2",
       "title" : "GTD2",

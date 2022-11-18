@@ -23,13 +23,23 @@ def main(experiment_config):
     num_exps = len(EXPERIMENT_RESULT)
     x_tics = np.array(EXPERIMENT_RESULT[0]['SVRG']['milestones']) / report_freq
     solver_title = [x['title'] for x in experiment_config['solvers']]
-    tpls = [('r', 'o'), ( 'b', '^'),('m', '+'), ('y', 'P'), ('c', 'd')]
+    tpls = [('r', 'o'), ('b', '^'), ('m', '+'), ('y', 'P'), ('c', 'd')]
 
     tpls = [(solver_title[i], tpls[i][0], tpls[i][1]) for i in range(len(solver_title))]
 
     x_scale_fontsize = 15
     y_scale_fontsize = 17
     title_fontsize = 20
+
+    x_label_text = 'Number of batches of size {}'.format(report_freq)
+
+    if experiment_config['experiment_type'] == 'dataset':
+        if experiment_config["experiment_arguments"]['type'] == 'gym':
+            title_text = experiment_config["experiment_arguments"]['gym_env']
+        else:
+            title_text = experiment_config["experiment_arguments"]['type']
+    else:
+        title_text = 'MDP, iid'
 
     for alg, color, marker in tpls:
         value_array = [np.array(EXPERIMENT_RESULT[num][alg]['distances']) for num in range(num_exps)]
@@ -42,9 +52,9 @@ def main(experiment_config):
         axs[0].plot(x_tics[:max_len], means, color=color, marker=marker, label=alg)
         axs[0].fill_between(x_tics[:max_len], lower_bound, upper_bound, color=color, alpha=.2)
     axs[0].set_yscale('log')
-    axs[0].set_title("MDP, f", fontsize=title_fontsize)
+    axs[0].set_title(title_text + ", f", fontsize=title_fontsize)
     axs[0].legend(loc="lower left")
-    axs[0].set_xlabel('Number of passes', fontsize=x_scale_fontsize)
+    axs[0].set_xlabel(x_label_text, fontsize=x_scale_fontsize)
     axs[0].set_ylabel('log(f)', fontsize=y_scale_fontsize)
 
     for alg, color, marker in tpls:
@@ -58,9 +68,9 @@ def main(experiment_config):
         axs[1].plot(x_tics[:max_len], means, color=color, marker=marker, label=alg)
         axs[1].fill_between(x_tics[:max_len], lower_bound, upper_bound, color=color, alpha=.2)
     axs[1].set_yscale('log')
-    axs[1].set_title("MDP, norm", fontsize=title_fontsize)
+    axs[1].set_title(title_text + ", norm", fontsize=title_fontsize)
     axs[1].legend(loc="lower left")
-    axs[1].set_xlabel('Number of passes', fontsize=x_scale_fontsize)
+    axs[1].set_xlabel(x_label_text, fontsize=x_scale_fontsize)
     axs[1].set_ylabel('log(norm)', fontsize=y_scale_fontsize)
     plt.savefig(figure_path)
 
