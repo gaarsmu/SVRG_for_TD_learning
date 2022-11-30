@@ -36,7 +36,7 @@ def run_experiment_fs(inputs):
         shift = shift * args['shift_length'] / torch.norm(shift)
         problem_set['theta_init'] = problem_set['theta_est'] + shift
 
-        args['max_iter'] = None
+        max_iter = args.get('max_iter', None)
         for solver_args in solvers:
             result = dataset_solver(args, solver_args, problem_set)
             if args['max_iter'] is None:
@@ -58,7 +58,7 @@ def run_experiment_env(inputs):
         shift = args["shift_length"]*shift / torch.norm(shift)
         args['theta_init'] = env.theta_opt + shift
 
-        args['max_iter'] = None
+        max_iter = args.get('max_iter', None)
         for solver_args in solvers:
             result = env_solver(args, solver_args, env)
             if args['max_iter'] is None:
@@ -104,4 +104,3 @@ if __name__ == '__main__':
     pargs = parser.parse_args()
     experiment_config = json.load(open(pargs.path, 'r'))
     main(experiment_config)
-    #print(experiment_config)

@@ -8,6 +8,7 @@ class mdp_env():
         dim = args['dim']
         f_dim = args['f_dim']
         dtype = args['dtype']
+        num_actions = args.get('num_actions', 10)
         probs_type = args['probs_type']
         self.gamma = args['gamma']
 
@@ -17,7 +18,7 @@ class mdp_env():
         elif probs_type == 'sparse':
             P = torch.rand(size=(dim, dim), dtype=dtype).to(device)
             rand_mat = torch.rand(dim, dim, dtype=dtype).to(device)
-            k_th_quant = torch.topk(rand_mat, 10, largest=False)[0][:, -1:]
+            k_th_quant = torch.topk(rand_mat, num_actions, largest=False)[0][:, -1:]
             mask = rand_mat <= k_th_quant
             P = P * mask + 1e-5
             P = (P / P.sum(dim=1, keepdim=True)).T

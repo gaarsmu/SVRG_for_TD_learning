@@ -9,8 +9,13 @@ def solve(env, args):
     gamma = args['gamma']
     conv_rate = args['conv_rate']
     report_freq = args['report_freq']
-    PHI = env.PHI
+    max_iter = args['max_iter']
+    if max_iter is None:
+        num_outer = args['num_outer']
+    else:
+        num_outer = 1000
 
+    PHI = env.PHI
     eig_min = torch.linalg.eigvals(1/2*(env.A+env.A.T)).real.min().item()
     eta = 1/8
     m = 16/eig_min
@@ -28,7 +33,7 @@ def solve(env, args):
     R = env.R
     R_max = torch.max(torch.abs(R))
 
-    for num_outer in range(1, args['num_outer']+1):
+    for num_outer in range(1, num_outer+1):
         theta_epoch = torch.clone(theta_cur)
 
         S2 = 4*R_max**2 + (2+4*gamma**2) * torch.norm(theta_epoch)**2
@@ -51,7 +56,8 @@ def solve(env, args):
                 freq_counter += 1
 
         glob_counter += batch_size
-
+        if max_iter is not None and glob_counter > max_iter:
+            break
         num_updates_loc = np.random.randint(1, int(m)+2)
         for num_inner in range(num_updates_loc):
             s1, s2, r = env.sample(1)[0]
@@ -66,9 +72,11 @@ def solve(env, args):
                 thetas.append(theta_cur)
                 norms.append(torch.norm(theta_cur - theta_opt).item())
                 milestones.append(glob_counter)
+            if max_iter is not None and glob_counter > max_iter:
+                break
         epoch_nums.append(glob_counter)
 
-    result = {'distances': distances, 'thetas': thetas, 'milestones': milestones, 'norms': norms, 'epochs' : epoch_nums}
+    result = {'distances': distances, 'thetas': thetas, 'milestones': milestones, 'norms': norms, 'epochs': epoch_nums}
     return result
 
 

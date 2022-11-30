@@ -27,6 +27,8 @@ def solve(problem_data, args):
     else:
         eta = args['learning_rate']
 
+    lr_ratio = args['lr_ratio']
+
     theta_cur = theta_init
     w_cur = torch.zeros_like(theta_cur)
 
@@ -44,7 +46,7 @@ def solve(problem_data, args):
             eta = 1/num_iter
         elif args['learning_rate'] == 'decr_pow':
             eta = 1/(num_iter**args['decay_rate'])
-        beta = eta
+        beta = eta * lr_ratio
 
         theta_cur = theta_cur - eta * update_loc_theta
         w_cur = w_cur - beta * update_loc_w

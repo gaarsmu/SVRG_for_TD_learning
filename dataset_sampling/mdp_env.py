@@ -8,6 +8,7 @@ def build_dataset(args):
     dtype = args['dtype']
     probs_type = args.get('probs_type', 'uniform')
     num_episodes = args["length"]
+    num_actions = args.get('num_actions', 10)
 
     if probs_type == 'uniform':
         P = torch.normal(0, 1, size=(dim, dim), dtype=dtype).to(device)
@@ -15,7 +16,7 @@ def build_dataset(args):
     elif probs_type == 'sparse':
         P = torch.rand(size=(dim, dim), dtype=dtype).to(device)
         rand_mat = torch.rand(dim, dim, dtype=dtype).to(device)
-        k_th_quant = torch.topk(rand_mat, 10, largest=False)[0][:, -1:]
+        k_th_quant = torch.topk(rand_mat, num_actions, largest=False)[0][:, -1:]
         mask = rand_mat <= k_th_quant
         P = P*mask + 10e-5
         P = (P/P.sum(dim=1, keepdim=True)).T

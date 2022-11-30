@@ -52,7 +52,10 @@ def solve(problem_data, args):
         eta_w = args['lr_value_w'] / eig_max_C
         eta = args['lr_value_theta']*eig_min_C/(eig_max_C*eig_max_ACA)
 
-    m = 16/eig_min
+    if args['batch_size'] == '16/eig_min':
+        m = 16/eig_min
+    else:
+        m = len(dataset)*args['batch_size']
 
     cur_dist = compute_f(problem_data, theta_init, theta_opt, args)
     distances = [cur_dist]
@@ -110,8 +113,7 @@ def solve(problem_data, args):
                 norms.append(torch.norm(theta_cur - theta_opt).item())
             if glob_counter > max_iter:
                 break
-        if glob_counter > max_iter:
-            break
+
     result = {'distances': distances, 'thetas': thetas, 'milestones': milestones,
               'theor_lr' : theor_learn_rate, 'theor_m' : theor_m, 'norms': norms}
     return result

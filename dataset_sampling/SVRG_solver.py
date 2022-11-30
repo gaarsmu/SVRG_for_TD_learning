@@ -12,6 +12,12 @@ def solve(problem_data, args):
     gamma = args['gamma']
     PHI = problem_data['PHI']
     report_freq = args['report_freq']
+    max_iter = args['max_iter']
+    if max_iter is None:
+        num_outer = args['num_outer']
+    else:
+        num_outer = 1000
+
 
     eig_min = torch.linalg.eigvals(1/2*(problem_data['A_hat']+problem_data['A_hat'].T)).real.min().item()
     eta = 1/8
@@ -25,7 +31,7 @@ def solve(problem_data, args):
     milestones = [0]
     theta_cur = theta_init
     glob_counter = 0
-    for num_outer in range(1, args['num_outer']+1):
+    for num_outer in range(1, num_outer+1):
         theta_epoch = torch.clone(theta_cur)
         R = torch.tensor([x[2] for x in dataset], device=device, dtype=dtype).reshape((len(dataset), 1))
         update_full = ((R + gamma * PHI[:, [x[1] for x in dataset]].T @ theta_epoch -
@@ -43,8 +49,10 @@ def solve(problem_data, args):
                 freq_counter += 1
 
         glob_counter += len(dataset)
-
-
+        #
+        if max_iter is not None and glob_counter > max_iter:
+            break
+        assert glob_counter <= max_iter
         num_updates_loc = np.random.randint(1, int(m)+2)
         for num_inner in range(num_updates_loc):
             choice = np.random.choice(range(len(dataset)), size=1)
@@ -60,5 +68,7 @@ def solve(problem_data, args):
                 thetas.append(theta_cur)
                 milestones.append(glob_counter)
                 norms.append(torch.norm(theta_cur - theta_opt).item())
+            if max_iter is not None and glob_counter > max_iter:
+                break
     result = {'distances': distances, 'thetas': thetas, 'milestones': milestones, 'norms': norms}
     return result

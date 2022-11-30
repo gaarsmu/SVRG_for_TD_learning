@@ -17,12 +17,14 @@ def dataset_solver(args, solver_args, problem_set):
     elif solver_args['type'] == 'GTD2':
         args['learning_rate'] = solver_args['learning_rate']
         args['lr_value'] = solver_args.get('lr_value', 1.)
+        args['lr_ratio'] = solver_args.get('lr_ratio', 1.)
         args['decay_rate'] = solver_args.get('decay_rate', 0.5)
         result = gtd2_solve(problem_set, args)
     elif solver_args['type'] == 'PDSVRG':
         args['learning_rate'] = solver_args['learning_rate']
         args['lr_value_w'] = solver_args['lr_value_w']
-        args['lr_value_theta'] = solver_args.get('decay_rate', None)
+        args['lr_value_theta'] = solver_args.get('lr_value_theta', None)
         args['lr_ratio'] = solver_args.get('lr_ratio', None)
+        args['batch_size'] = solver_args.get('batch_size', '16/eig_min')
         result = PDSVRG_solve(problem_set, args)
     return result
