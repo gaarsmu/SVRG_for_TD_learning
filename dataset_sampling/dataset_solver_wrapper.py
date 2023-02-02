@@ -4,6 +4,7 @@ from dataset_sampling.PD_SVRG_solver import solve as PDSVRG_solve
 from dataset_sampling.gtd2_solver import solve as gtd2_solve
 from dataset_sampling.bSVRG_solver import solve as bSVRG_solve
 
+
 def dataset_solver(args, solver_args, problem_set):
     if solver_args['type'] == 'SVRG':
         result = SVRG_solve(problem_set, args)

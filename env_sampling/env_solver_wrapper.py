@@ -5,6 +5,7 @@ from env_sampling.VRTD_env_solve import solve as VRTD_env_solve
 def env_solver(args, solver_args, env):
     if solver_args['type'] == 'SVRG':
         args['conv_rate'] = solver_args['conv_rate']
+        args['regime'] = solver_args.get('regime', 'normal')
         result = SVRG_env_solve(env, args)
     elif solver_args['type'] == 'TD':
         args['learning_rate'] = solver_args['learning_rate']

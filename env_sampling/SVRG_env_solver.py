@@ -14,6 +14,7 @@ def solve(env, args):
         num_outer = args['num_outer']
     else:
         num_outer = 1000
+    regime = args['regime']
 
     PHI = env.PHI
     eig_min = torch.linalg.eigvals(1/2*(env.A+env.A.T)).real.min().item()
@@ -58,6 +59,10 @@ def solve(env, args):
         glob_counter += batch_size
         if max_iter is not None and glob_counter > max_iter:
             break
+
+        if regime == 'adaptive':
+            eta = eta*conv_rate
+            m = m/conv_rate**2
         num_updates_loc = np.random.randint(1, int(m)+2)
         for num_inner in range(num_updates_loc):
             s1, s2, r = env.sample(1)[0]

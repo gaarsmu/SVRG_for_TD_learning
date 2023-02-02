@@ -21,9 +21,10 @@ def main(experiment_config):
 
     EXPERIMENT_RESULT = torch.load(exp_data)
     num_exps = len(EXPERIMENT_RESULT)
-    x_tics = np.array(EXPERIMENT_RESULT[0]['SVRG']['milestones']) / report_freq
+    x_tics = np.arange(0,  experiment_config["experiment_arguments"]["max_iter"]//report_freq+1)
     solver_title = [x['title'] for x in experiment_config['solvers']]
-    tpls = [('r', 'o'), ('b', '^'), ('m', '+'), ('y', 'P'), ('c', 'd')]
+    tpls = [('#377eb8', 'o'), ('#ff7f00', '^'), ('#4daf4a', '+'),
+            ('#f781bf', 'P'), ('#a65628', 'd'), ('#984ea3', 'x')]
 
     tpls = [(solver_title[i], tpls[i][0], tpls[i][1]) for i in range(len(solver_title))]
 

@@ -1,7 +1,7 @@
 {"num_experiments" :  10,
   "num_parallel_processes" : 5,
-  "experiment_type" : "environment",
-  "out_path" : "Results/Experiment_test.pth",
+  "experiment_type" : "dataset",
+  "out_path" : "Results/Experiment_VRTD_grid_search.pth",
   "experiment_arguments" : {
     "type": "MDP_iid",
     "dim" : 400,
