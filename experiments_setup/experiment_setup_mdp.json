@@ -1,0 +1,42 @@
+{"num_experiments" :  10,
+  "num_parallel_processes" : 5,
+  "experiment_type" : "dataset",
+  "out_path" : "Results/Experiment_test2.pth",
+  "experiment_arguments" : {
+    "type": "MDP",
+    "dim" : 400,
+    "f_dim" : 21,
+    "gamma" : 0.95,
+    "dtype" : "float64",
+    "PHI" : "random",
+    "probs_type" : "sparse",
+    "report_freq" : 10000,
+    "length" : 5000,
+    "num_outer": 10,
+    "shift_length":  10},
+  "solvers" : [
+    {"type" : "SVRG",
+     "title" : "SVRG"
+    },
+    {"type" : "TD",
+     "title" : "TD-1/sqrt(t)",
+     "learning_rate" : "decr_pow",
+     "decay_rate" : 0.5
+    },
+    {"type" : "TD",
+     "title" : "TD-1/t",
+     "learning_rate" : "decr"
+    },
+    {"type" : "GTD2",
+      "title" : "GTD2",
+      "learning_rate" : "const",
+      "lr_value" : 0.0625
+    },
+    {"type" : "PDSVRG",
+      "title" : "PD-SVRG",
+      "learning_rate" : "mult_ratio",
+      "lr_value_w" : 0.1,
+      "lr_ratio" : 1.0
+    }
+  ]
+}

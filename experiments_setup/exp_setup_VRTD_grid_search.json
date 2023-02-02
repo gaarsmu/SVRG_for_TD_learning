@@ -1,0 +1,42 @@
+{"num_experiments" :  10,
+  "num_parallel_processes" : 5,
+  "experiment_type" : "dataset",
+  "out_path" : "Results/Experiment_VRTD_grid_search.pth",
+  "experiment_arguments" : {
+    "type": "MDP_iid",
+    "dim" : 400,
+    "f_dim" : 21,
+    "gamma" : 0.95,
+    "num_actions" : 10,
+    "dtype" : "float64",
+    "PHI" : "random",
+    "probs_type" : "sparse",
+    "report_freq" : 10000,
+    "max_iter": 300000,
+    "shift_length":  1},
+  "solvers" : [
+    {"type" : "SVRG",
+     "title" : "SVRG",
+    "conv_rate": 0.8944272
+    },
+    {"type" : "VRTD",
+      "title" : "VRTD_2000",
+      "batch_size" : 2000,
+      "learning_rate" : 0.1
+    },
+    {"type" : "VRTD",
+      "title" : "VRTD_1000",
+      "batch_size" : 1000,
+      "learning_rate" : 0.1
+    },
+      {"type" : "VRTD",
+      "title" : "VRTD_500",
+      "batch_size" : 500,
+      "learning_rate" : 0.1
+    },
+    {"type" : "VRTD",
+      "title" : "VRTD_5000",
+      "batch_size" : 5000,
+      "learning_rate" : 0.1
+    }]
+}

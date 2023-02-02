@@ -1,7 +1,8 @@
 {"num_experiments" :  10,
   "num_parallel_processes" : 5,
   "experiment_type" : "environment",
-  "out_path" : "Results/Experiment_test.pth",
+  "out_path" : "Results/Experiment_mdp_env.pth",
+  "figure_path" : "figures/MDP_env_figure2.jpg",
   "experiment_arguments" : {
     "type": "MDP_iid",
     "dim" : 400,
@@ -12,11 +13,16 @@
     "PHI" : "random",
     "probs_type" : "sparse",
     "report_freq" : 10000,
-    "num_outer": 10,
+    "max_iter": 400000,
     "shift_length":  1},
   "solvers" : [
     {"type" : "SVRG",
      "title" : "SVRG",
+    "conv_rate": 0.8944272
+    },
+    {"type" : "SVRG",
+      "title" : "SVRG",
+      "regime" : "adaptive",
     "conv_rate": 0.8944272
     },
     {"type" : "TD",
@@ -30,8 +36,14 @@
     },
     {"type" : "VRTD",
       "title" : "VRTD",
-      "batch_size" : 2000,
+      "batch_size" : 5000,
       "learning_rate" : 0.1
+    },
+    {"type" : "TD",
+      "title" : "TD-1/sqrt(t)",
+      "learning_rate" : "decr_pow",
+      "lr_value" : 0.1,
+      "decay_rate" : 0.5
     }
   ]
 }
