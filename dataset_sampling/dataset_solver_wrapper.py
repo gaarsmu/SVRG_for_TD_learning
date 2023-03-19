@@ -3,7 +3,7 @@ from dataset_sampling.policy_iter_solve import solve as pi_solve
 from dataset_sampling.PD_SVRG_solver import solve as PDSVRG_solve
 from dataset_sampling.gtd2_solver import solve as gtd2_solve
 from dataset_sampling.bSVRG_solver import solve as bSVRG_solve
-
+from dataset_sampling.PD_SVRG_solver import solve as PDSAGA_solve
 
 def dataset_solver(args, solver_args, problem_set):
     if solver_args['type'] == 'SVRG':
@@ -28,4 +28,11 @@ def dataset_solver(args, solver_args, problem_set):
         args['lr_ratio'] = solver_args.get('lr_ratio', None)
         args['batch_size'] = solver_args.get('batch_size', '16/eig_min')
         result = PDSVRG_solve(problem_set, args)
+    elif solver_args['type'] == 'PDSAGA':
+        args['learning_rate'] = solver_args['learning_rate']
+        args['lr_value_w'] = solver_args['lr_value_w']
+        args['lr_value_theta'] = solver_args.get('lr_value_theta', None)
+        args['lr_ratio'] = solver_args.get('lr_ratio', None)
+        args['batch_size'] = solver_args.get('batch_size', '16/eig_min')
+        result = PDSAGA_solve(problem_set, args)
     return result
